@@ -18,21 +18,35 @@ The Telegram Subscriber API provides comprehensive control over Telegram channel
 
 ## 🔑 Authentication
 
-This API uses your **Telegram Bot Token** for authentication. 
+This API uses **RapidAPI authentication** with your subscription key.
 
-### How to Get Your Bot Token
+### Required Headers
+
+All requests must include these headers:
+
+```
+x-rapidapi-host: telegram-manager.p.rapidapi.com
+x-rapidapi-key: YOUR_RAPIDAPI_KEY
+```
+
+### Telegram Bot Token Setup
+
+You also need a **Telegram Bot Token**:
 
 1. Open Telegram and search for `@BotFather`
 2. Send `/newbot` and follow the instructions
 3. Copy the token provided (format: `1234567890:ABCdefGHIjklMNOpqrsTUVwxyz`)
-4. Use this token in the `token` query parameter for all requests
+4. Add it as a query parameter `token` in your requests
 
 ### Making Authenticated Requests
 
-All endpoints require a `token` query parameter:
+Example:
 
-```
-GET /api/telegram/chat/{chatId}?token=YOUR_BOT_TOKEN
+```bash
+curl --request GET \
+  --url 'https://telegram-manager.p.rapidapi.com/api/telegram/chat/-1001234567890?token=YOUR_BOT_TOKEN' \
+  --header 'x-rapidapi-host: telegram-manager.p.rapidapi.com' \
+  --header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
 ```
 
 ---
@@ -48,6 +62,14 @@ Retrieve detailed information about a Telegram chat (channel or group).
 **Parameters**:
 - `chatId` (path, required): Chat ID (e.g., `-1001234567890` or `@channelname`)
 - `token` (query, required): Your Telegram bot token
+
+**Example Request**:
+```bash
+curl --request GET \
+  --url 'https://telegram-manager.p.rapidapi.com/api/telegram/chat/-1001234567890?token=YOUR_BOT_TOKEN' \
+  --header 'x-rapidapi-host: telegram-manager.p.rapidapi.com' \
+  --header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
+```
 
 **Response**:
 ```json
@@ -76,6 +98,14 @@ Get the total number of members in a chat.
 **Parameters**:
 - `chatId` (path, required): Chat ID
 - `token` (query, required): Your bot token
+
+**Example Request**:
+```bash
+curl --request GET \
+  --url 'https://telegram-manager.p.rapidapi.com/api/telegram/chat/-1001234567890/members/count?token=YOUR_BOT_TOKEN' \
+  --header 'x-rapidapi-host: telegram-manager.p.rapidapi.com' \
+  --header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
+```
 
 **Response**:
 ```json
@@ -430,17 +460,24 @@ All responses follow this standard format:
 
 ## 📝 Usage Examples
 
-### Example 1: Send a Welcome Message
+### Example 1: Send a Welcome Message (JavaScript)
 
 ```javascript
 const axios = require('axios');
 
-const sendWelcome = async (chatId, token) => {
+const sendWelcome = async (chatId, botToken, rapidApiKey) => {
   const response = await axios.post(
-    `https://telegram-subscriber-api.vercel.app/api/telegram/chat/${chatId}/message?token=${token}`,
+    `https://telegram-manager.p.rapidapi.com/api/telegram/chat/${chatId}/message?token=${botToken}`,
     {
       text: "Welcome to our community! 🎉",
       parseMode: "Markdown"
+    },
+    {
+      headers: {
+        'x-rapidapi-host': 'telegram-manager.p.rapidapi.com',
+        'x-rapidapi-key': rapidApiKey,
+        'content-type': 'application/json'
+      }
     }
   );
   
@@ -448,13 +485,21 @@ const sendWelcome = async (chatId, token) => {
 };
 ```
 
-### Example 2: Create Limited Invite Link
+### Example 2: Create Limited Invite Link (Python)
 
 ```python
 import requests
 
-def create_limited_invite(chat_id, token, member_limit=50):
-    url = f"https://telegram-subscriber-api.vercel.app/api/telegram/chat/{chat_id}/invite-link?token={token}"
+def create_limited_invite(chat_id, bot_token, rapidapi_key, member_limit=50):
+    url = f"https://telegram-manager.p.rapidapi.com/api/telegram/chat/{chat_id}/invite-link"
+    
+    headers = {
+        "x-rapidapi-host": "telegram-manager.p.rapidapi.com",
+        "x-rapidapi-key": rapidapi_key,
+        "content-type": "application/json"
+    }
+    
+    params = {"token": bot_token}
     
     payload = {
         "name": "Limited Access",
@@ -462,15 +507,51 @@ def create_limited_invite(chat_id, token, member_limit=50):
         "expireDate": 1735689600  # December 31, 2024
     }
     
-    response = requests.post(url, json=payload)
+    response = requests.post(url, params=params, json=payload, headers=headers)
     return response.json()
 ```
 
-### Example 3: Get Member Count
+### Example 3: Get Member Count (cURL)
 
 ```bash
-curl -X GET \
-  "https://telegram-subscriber-api.vercel.app/api/telegram/chat/-1001234567890/members/count?token=YOUR_TOKEN"
+curl --request GET \
+  --url 'https://telegram-manager.p.rapidapi.com/api/telegram/chat/-1001234567890/members/count?token=YOUR_BOT_TOKEN' \
+  --header 'x-rapidapi-host: telegram-manager.p.rapidapi.com' \
+  --header 'x-rapidapi-key: YOUR_RAPIDAPI_KEY'
+```
+
+### Example 4: Ban Member (PHP)
+
+```php
+<?php
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://telegram-manager.p.rapidapi.com/api/telegram/chat/-1001234567890/member/123456789/ban?token=YOUR_BOT_TOKEN",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => json_encode([
+        "revokeMessages" => true
+    ]),
+    CURLOPT_HTTPHEADER => [
+        "x-rapidapi-host: telegram-manager.p.rapidapi.com",
+        "x-rapidapi-key: YOUR_RAPIDAPI_KEY",
+        "content-type: application/json"
+    ],
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+    echo "cURL Error: " . $err;
+} else {
+    echo $response;
+}
+?>
 ```
 
 ---
@@ -523,11 +604,35 @@ This API is provided under the MIT License.
 
 ---
 
-**API Base URL**: `https://telegram-subscriber-api.vercel.app`
+## 🌐 API Information
 
-**Interactive Documentation**: [Swagger UI](https://telegram-subscriber-api.vercel.app/api-docs)
+**API Base URL**: `https://telegram-manager.p.rapidapi.com`
+
+**RapidAPI Host**: `telegram-manager.p.rapidapi.com`
 
 **Version**: 2.0.0
+
+**Pricing**: Available on RapidAPI Marketplace
+
+---
+
+## 🔧 Getting Started
+
+1. **Subscribe to the API** on RapidAPI
+2. **Get your RapidAPI Key** from your subscription dashboard
+3. **Create a Telegram Bot** via @BotFather and get your bot token
+4. **Make your first request** using the examples above
+5. **Add your bot** to your Telegram channel/group as an administrator
+
+---
+
+## 💡 Common Use Cases
+
+- 📢 **Marketing Automation**: Send promotional messages to your Telegram channels
+- 👥 **Community Management**: Automate member onboarding and moderation
+- 🔗 **Invite Link Management**: Create time-limited or member-limited invite links
+- 📊 **Analytics Integration**: Track member counts and engagement metrics
+- 🤖 **Bot Development**: Build advanced Telegram bots with custom workflows
 
 ---
 
