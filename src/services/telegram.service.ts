@@ -1,19 +1,16 @@
 import axios, { AxiosInstance } from 'axios';
-import { Telegraf } from 'telegraf';
 import { logger } from '../utils/logger';
-import { TelegramApiError, NotFoundError } from '../utils/errors';
+import { TelegramApiError } from '../utils/errors';
 import {
   ChatInfo,
   ChatAdmin,
   MessageResult,
-  InviteResult,
-  CopySubscribersResult,
 } from '../types';
 
 export class TelegramService {
   private axiosInstance: AxiosInstance;
 
-  constructor(private token: string) {
+  constructor(token: string) {
     this.axiosInstance = axios.create({
       baseURL: `https://api.telegram.org/bot${token}`,
       timeout: 30000,

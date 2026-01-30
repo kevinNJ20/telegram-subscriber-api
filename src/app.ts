@@ -55,7 +55,7 @@ export function createApp(): Application {
    *       200:
    *         description: API en ligne
    */
-  app.get('/', (req, res) => {
+  app.get('/', (_req, res) => {
     res.json({
       success: true,
       message: '🚀 Telegram Subscriber API v2.0',
@@ -80,7 +80,7 @@ export function createApp(): Application {
    *       200:
    *         description: API en bonne santé
    */
-  app.get('/health', (req, res) => {
+  app.get('/health', (_req, res) => {
     res.json({
       success: true,
       status: 'healthy',

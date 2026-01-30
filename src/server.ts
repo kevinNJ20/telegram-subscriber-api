@@ -52,7 +52,7 @@ if (process.env.VERCEL !== '1') {
   process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
   // Gestion des erreurs non capturées
-  process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
+  process.on('unhandledRejection', (reason: any, _promise: Promise<any>) => {
     logger.error('Rejet de promesse non géré', {
       reason: reason?.message || reason,
       stack: reason?.stack,

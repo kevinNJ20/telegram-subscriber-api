@@ -10,7 +10,7 @@ import { RapidAPIRequest } from '../types';
  */
 export const rapidApiMiddleware = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): void => {
   // Si RapidAPI n'est pas activé, on passe la requête
@@ -57,7 +57,7 @@ export const rapidApiMiddleware = (
  * Middleware pour vérifier le niveau d'abonnement RapidAPI
  */
 export const requireSubscription = (allowedPlans: string[]) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return (req: Request, _res: Response, next: NextFunction): void => {
     if (!config.rapidapi.enabled) {
       next();
       return;

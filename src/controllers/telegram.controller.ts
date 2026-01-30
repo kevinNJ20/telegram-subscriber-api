@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { createTelegramService } from '../services/telegram.service';
-import { logger } from '../utils/logger';
 import { ValidationError } from '../utils/errors';
 
 export class TelegramController {
