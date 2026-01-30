@@ -14,6 +14,9 @@ import { errorHandler, notFoundHandler } from './middlewares/errorHandler.middle
 export function createApp(): Application {
   const app = express();
 
+  // Trust proxy pour Vercel
+  app.set('trust proxy', 1);
+
   // Middlewares de sécurité
   app.use(helmet());
   app.use(cors());

@@ -473,15 +473,41 @@ heroku logs --tail
 
 ### Déploiement sur Vercel
 
+**Important** : Vercel utilise des fonctions serverless. Le projet est configuré pour fonctionner automatiquement.
+
+#### Via CLI
+
 ```bash
 # 1. Installer Vercel CLI
 npm install -g vercel
 
-# 2. Déployer
+# 2. Se connecter
+vercel login
+
+# 3. Déployer
 vercel --prod
 
-# 3. Configurer les variables d'environnement sur vercel.com
+# 4. Configurer les variables d'environnement
+vercel env add TELEGRAM_BOT_TOKEN
+# Entrez votre token
 ```
+
+#### Via Dashboard Vercel
+
+1. Allez sur [vercel.com](https://vercel.com)
+2. Cliquez sur **New Project**
+3. Importez votre dépôt GitHub
+4. Configurez les variables d'environnement :
+   - `TELEGRAM_BOT_TOKEN` : Votre token bot
+   - `NODE_ENV` : `production`
+   - `LOG_LEVEL` : `info`
+5. Cliquez sur **Deploy**
+
+#### Configuration Build
+
+Vercel détecte automatiquement le projet TypeScript et exécute `npm run vercel-build`.
+
+**Note** : Les logs ne seront pas sauvegardés dans des fichiers sur Vercel (environnement serverless), mais visibles dans le dashboard Vercel.
 
 ### Déploiement avec Docker
 
@@ -834,6 +860,21 @@ lsof -ti:3000 | xargs kill -9
 netstat -ano | findstr :3000
 taskkill /PID <PID> /F
 ```
+
+### Erreur 404 sur Vercel après déploiement
+
+Si vous obtenez une erreur 404 après le déploiement :
+
+1. **Vérifiez que le build a réussi** dans le dashboard Vercel
+2. **Vérifiez les variables d'environnement** :
+   - `TELEGRAM_BOT_TOKEN` doit être défini
+3. **Attendez quelques minutes** - le déploiement peut prendre du temps
+4. **Vérifiez les logs** dans Vercel Dashboard > Functions
+5. **Testez avec** : `https://votre-app.vercel.app/health`
+6. **Si le problème persiste**, redéployez :
+   ```bash
+   vercel --prod --force
+   ```
 
 ---
 
