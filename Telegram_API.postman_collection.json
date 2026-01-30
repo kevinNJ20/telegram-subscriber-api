@@ -1,0 +1,829 @@
+{
+	"info": {
+		"_postman_id": "telegram-subscriber-api-2024",
+		"name": "Telegram Subscriber API v2.0",
+		"description": "Collection complète pour tester l'API Telegram Subscriber.\n\n## 🚀 Configuration\n\n1. Importez cette collection dans Postman\n2. Créez un environnement avec ces variables :\n   - `base_url` : http://localhost:3000\n   - `telegram_token` : Votre token bot Telegram\n   - `chat_id` : ID de votre canal/groupe (-1001234567890)\n   - `user_id` : ID d'un utilisateur pour les tests de modération\n\n## 📚 Endpoints\n\n- Santé : Health checks et infos\n- Chat : Informations sur les chats\n- Messages : Envoi de messages\n- Invitations : Gestion des liens d'invitation\n- Modération : Bannir, promouvoir des membres\n- Bot : Opérations du bot\n\n## 🔐 Authentification\n\nTous les endpoints nécessitent le paramètre `token` dans l'URL.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "telegram-api"
+	},
+	"item": [
+		{
+			"name": "🏥 Santé & Info",
+			"item": [
+				{
+					"name": "Page d'accueil",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "Retourne les informations de base de l'API et les liens vers la documentation."
+					},
+					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Vérifie l'état de santé de l'API (uptime, environnement, etc.)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints pour vérifier l'état de l'API"
+		},
+		{
+			"name": "📊 Chat - Informations",
+			"item": [
+				{
+					"name": "Nombre de membres",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/members/count?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"members",
+								"count"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Obtient le nombre total de membres dans un chat/canal/groupe."
+					},
+					"response": []
+				},
+				{
+					"name": "Liste des administrateurs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/administrators?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"administrators"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Récupère la liste complète des administrateurs avec leurs permissions et informations."
+					},
+					"response": []
+				},
+				{
+					"name": "Informations du chat",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/info?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"info"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Obtient toutes les informations détaillées d'un chat (titre, description, nombre de membres, etc.)"
+					},
+					"response": []
+				}
+			],
+			"description": "Récupération d'informations sur les chats Telegram"
+		},
+		{
+			"name": "💬 Messages",
+			"item": [
+				{
+					"name": "Envoyer un message simple",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Bonjour ! Ceci est un message de test envoyé via l'API 🚀\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/message?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"message"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Envoie un message texte simple à un chat."
+					},
+					"response": []
+				},
+				{
+					"name": "Envoyer un message avec Markdown",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"**Annonce importante** \\n\\n_Nouvelle fonctionnalité disponible !_\\n\\n`Code`: Utilisez le code promo HELLO2024\",\n  \"parseMode\": \"Markdown\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/message?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"message"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Envoie un message formaté avec Markdown (gras, italique, code)."
+					},
+					"response": []
+				},
+				{
+					"name": "Envoyer un message avec HTML",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"<b>Titre en gras</b>\\n\\n<i>Texte en italique</i>\\n\\n<code>Code inline</code>\\n\\n<a href='https://example.com'>Lien cliquable</a>\",\n  \"parseMode\": \"HTML\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/message?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"message"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Envoie un message formaté avec HTML."
+					},
+					"response": []
+				},
+				{
+					"name": "Envoyer une photo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"media\": \"https://picsum.photos/800/600\",\n  \"message\": \"Regardez cette belle image ! 📸\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/message?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"message"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Envoie une photo avec une légende optionnelle."
+					},
+					"response": []
+				},
+				{
+					"name": "Répondre à un message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Ceci est une réponse à votre message\",\n  \"replyToMessageId\": 123\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/message?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"message"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Envoie un message en réponse à un message existant."
+					},
+					"response": []
+				}
+			],
+			"description": "Envoi de messages texte et médias"
+		},
+		{
+			"name": "🔗 Invitations",
+			"item": [
+				{
+					"name": "Créer un lien d'invitation simple",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Lien d'invitation général\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/invite-link?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"invite-link"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Crée un lien d'invitation simple sans limite."
+					},
+					"response": []
+				},
+				{
+					"name": "Créer un lien VIP (limité)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Accès VIP\",\n  \"memberLimit\": 50\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/invite-link?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"invite-link"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Crée un lien d'invitation limité à un certain nombre de membres."
+					},
+					"response": []
+				},
+				{
+					"name": "Créer un lien temporaire (expire)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Lien promo 7 jours\",\n  \"expireDate\": {{$timestamp}},\n  \"memberLimit\": 100\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/invite-link?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"invite-link"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Crée un lien d'invitation qui expire après une date donnée."
+					},
+					"response": []
+				},
+				{
+					"name": "Exporter le lien permanent",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/invite-link/export?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"invite-link",
+								"export"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Exporte le lien d'invitation permanent du chat."
+					},
+					"response": []
+				}
+			],
+			"description": "Création et gestion des liens d'invitation"
+		},
+		{
+			"name": "👮 Modération",
+			"item": [
+				{
+					"name": "Bannir un membre (permanent)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"revokeMessages\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/member/{{user_id}}/ban?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"member",
+								"{{user_id}}",
+								"ban"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Bannit un membre de façon permanente."
+					},
+					"response": []
+				},
+				{
+					"name": "Bannir et supprimer messages",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"revokeMessages\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/member/{{user_id}}/ban?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"member",
+								"{{user_id}}",
+								"ban"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Bannit un membre et supprime tous ses messages."
+					},
+					"response": []
+				},
+				{
+					"name": "Bannir temporairement",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"untilDate\": {{$timestamp}},\n  \"revokeMessages\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/member/{{user_id}}/ban?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"member",
+								"{{user_id}}",
+								"ban"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Bannit un membre jusqu'à une date spécifique."
+					},
+					"response": []
+				},
+				{
+					"name": "Débannir un membre",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/member/{{user_id}}/unban?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"member",
+								"{{user_id}}",
+								"unban"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Retire le bannissement d'un membre."
+					},
+					"response": []
+				},
+				{
+					"name": "Promouvoir en admin (toutes permissions)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"canManageChat\": true,\n  \"canPostMessages\": true,\n  \"canEditMessages\": true,\n  \"canDeleteMessages\": true,\n  \"canManageVideoChats\": true,\n  \"canRestrictMembers\": true,\n  \"canPromoteMembers\": true,\n  \"canChangeInfo\": true,\n  \"canInviteUsers\": true,\n  \"canPinMessages\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/member/{{user_id}}/promote?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"member",
+								"{{user_id}}",
+								"promote"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Promeut un membre en administrateur avec toutes les permissions."
+					},
+					"response": []
+				},
+				{
+					"name": "Promouvoir en modérateur (permissions limitées)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"canManageChat\": false,\n  \"canPostMessages\": false,\n  \"canEditMessages\": false,\n  \"canDeleteMessages\": true,\n  \"canManageVideoChats\": false,\n  \"canRestrictMembers\": true,\n  \"canPromoteMembers\": false,\n  \"canChangeInfo\": false,\n  \"canInviteUsers\": true,\n  \"canPinMessages\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/telegram/chat/{{chat_id}}/member/{{user_id}}/promote?token={{telegram_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"chat",
+								"{{chat_id}}",
+								"member",
+								"{{user_id}}",
+								"promote"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								}
+							]
+						},
+						"description": "Promeut un membre en modérateur avec permissions limitées (supprimer, inviter, épingler)."
+					},
+					"response": []
+				}
+			],
+			"description": "Gestion de la modération (bannir, promouvoir)"
+		},
+		{
+			"name": "🤖 Bot Operations",
+			"item": [
+				{
+					"name": "Obtenir les mises à jour",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/telegram/updates?token={{telegram_token}}&offset=0&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"telegram",
+								"updates"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{telegram_token}}",
+									"description": "Token du bot Telegram"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "Offset pour la pagination"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Nombre de mises à jour à récupérer"
+								}
+							]
+						},
+						"description": "Récupère les dernières mises à jour du bot (messages reçus, etc.)"
+					},
+					"response": []
+				}
+			],
+			"description": "Opérations liées au bot Telegram"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script exécuté avant chaque requête",
+					"// Vous pouvez ajouter ici des validations ou des transformations"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Tests automatiques après chaque requête",
+					"pm.test(\"Status code is 200 or 201\", function () {",
+					"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+					"});",
+					"",
+					"pm.test(\"Response has success field\", function () {",
+					"    var jsonData = pm.response.json();",
+					"    pm.expect(jsonData).to.have.property('success');",
+					"});",
+					"",
+					"pm.test(\"Response time is less than 2000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "telegram_token",
+			"value": "VOTRE_TOKEN_ICI",
+			"type": "string"
+		},
+		{
+			"key": "chat_id",
+			"value": "-1001234567890",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "123456789",
+			"type": "string"
+		}
+	]
+}
+
