@@ -12,6 +12,8 @@ import { apiLimiter } from './middlewares/rateLimiter.middleware';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.middleware';
 
 export function createApp(): Application {
+  console.log('🔧 Creating Express app...');
+  
   const app = express();
 
   // Trust proxy pour Vercel
@@ -110,6 +112,10 @@ export function createApp(): Application {
   // Gestionnaire d'erreurs global
   app.use(errorHandler);
 
+  console.log('✅ Express app created successfully');
   return app;
 }
+
+// Export default pour compatibilité Vercel
+export default createApp();
 

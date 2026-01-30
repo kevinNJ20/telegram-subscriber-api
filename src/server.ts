@@ -15,7 +15,6 @@ try {
 const app = createApp();
 
 // Export pour Vercel Serverless
-export default app;
 
 // Démarrage du serveur uniquement si pas en mode serverless
 if (process.env.VERCEL !== '1') {
@@ -67,4 +66,7 @@ if (process.env.VERCEL !== '1') {
     process.exit(1);
   });
 }
+
+// Export l'app pour Vercel
+module.exports = app;
 

@@ -2,6 +2,36 @@
 
 > API REST moderne et sécurisée pour gérer les abonnés et effectuer des opérations sur les canaux et groupes Telegram. Prête pour la monétisation sur **RapidAPI**.
 
+## ⚡ Démarrage Ultra-Rapide
+
+### 1. Installation
+```bash
+npm install
+```
+
+### 2. Configuration
+Créez un fichier `.env` :
+```env
+TELEGRAM_BOT_TOKEN=votre_token_de_@BotFather
+NODE_ENV=development
+PORT=3000
+```
+
+### 3. Lancer
+```bash
+npm run dev
+```
+Ouvrez http://localhost:3000/api-docs
+
+### 4. Déployer sur Vercel
+```bash
+npx vercel login
+npx vercel --prod
+```
+Puis ajoutez `TELEGRAM_BOT_TOKEN` dans Vercel Dashboard > Settings > Environment Variables
+
+---
+
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.18-lightgrey.svg)](https://expressjs.com/)
@@ -454,6 +484,29 @@ curl -X POST \
 
 ## 🌐 Déploiement
 
+### 🚀 Déploiement sur Vercel (Recommandé)
+
+```bash
+# 1. Se connecter
+npx vercel login
+
+# 2. Déployer
+npx vercel --prod
+```
+
+**Configuration Vercel :**
+1. Dans le Dashboard Vercel > Settings > Environment Variables
+2. Ajoutez : `TELEGRAM_BOT_TOKEN=votre_token`
+3. Redéployez si nécessaire : `npx vercel --prod --force`
+
+**Testez votre déploiement :**
+```bash
+curl https://votre-app.vercel.app/health
+curl https://votre-app.vercel.app/
+```
+
+---
+
 ### Déploiement sur Heroku
 
 ```bash
@@ -863,17 +916,24 @@ taskkill /PID <PID> /F
 
 ### Erreur 404 sur Vercel après déploiement
 
-Si vous obtenez une erreur 404 après le déploiement :
+Si vous obtenez une erreur 404 :
 
-1. **Vérifiez que le build a réussi** dans le dashboard Vercel
-2. **Vérifiez les variables d'environnement** :
-   - `TELEGRAM_BOT_TOKEN` doit être défini
-3. **Attendez quelques minutes** - le déploiement peut prendre du temps
-4. **Vérifiez les logs** dans Vercel Dashboard > Functions
-5. **Testez avec** : `https://votre-app.vercel.app/health`
-6. **Si le problème persiste**, redéployez :
+1. **Vérifiez les variables d'environnement** dans Vercel Dashboard :
+   ```
+   TELEGRAM_BOT_TOKEN=votre_token
+   NODE_ENV=production
+   ```
+
+2. **Vérifiez les logs** : Dashboard > Functions > Logs
+
+3. **Redéployez** :
    ```bash
-   vercel --prod --force
+   npx vercel --prod --force
+   ```
+
+4. **Testez** :
+   ```bash
+   curl https://votre-app.vercel.app/health
    ```
 
 ---

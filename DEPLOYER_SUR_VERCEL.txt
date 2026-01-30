@@ -1,0 +1,39 @@
+════════════════════════════════════════════════════════════
+   DÉPLOYER L'API TELEGRAM SUR VERCEL EN 3 COMMANDES
+════════════════════════════════════════════════════════════
+
+1. Se connecter à Vercel
+   ----------------------
+   npx vercel login
+   
+   (Suivez les instructions dans le navigateur)
+
+
+2. Déployer
+   ---------
+   npx vercel --prod
+
+
+3. Configurer le token Telegram
+   ------------------------------
+   - Allez sur https://vercel.com/dashboard
+   - Cliquez sur votre projet
+   - Settings > Environment Variables
+   - Ajoutez : TELEGRAM_BOT_TOKEN = votre_token
+   - Redéployez : npx vercel --prod --force
+
+
+4. Tester
+   -------
+   https://votre-app.vercel.app/health
+   https://votre-app.vercel.app/api-docs
+
+
+════════════════════════════════════════════════════════════
+   C'EST TOUT ! VOTRE API EST EN LIGNE ! 🚀
+════════════════════════════════════════════════════════════
+
+En cas de 404 :
+- Vérifiez que TELEGRAM_BOT_TOKEN est bien configuré
+- Redéployez avec : npx vercel --prod --force
+- Consultez les logs : Dashboard > Functions

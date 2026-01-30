@@ -1,17 +1,43 @@
-node_modules
+# Node modules (will be installed by Vercel)
+node_modules/
+
+# Environment files
 .env
 .env.*
-src
-tests
-*.md
-.git
-.github
-.vscode
-.idea
+!.env.example
+
+# Git
+.git/
+.github/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
 *.log
-coverage
-.nyc_output
+
+# Tests
+tests/
+coverage/
+.nyc_output/
+
+# Docker
 Dockerfile
 docker-compose.yml
-Makefile
+.dockerignore
 
+# Documentation (keep README.md)
+*.md
+!README.md
+
+# Build output local (sera regénéré par Vercel)
+dist/
+
+# Autres
+Makefile
+.DS_Store
