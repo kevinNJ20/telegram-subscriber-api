@@ -30,7 +30,9 @@ export const logger = winston.createLogger({
   ],
 });
 
-if (config.env === 'production') {
+// En production sur Vercel, on utilise uniquement la console
+// Les fichiers de log ne sont pas disponibles en environnement serverless
+if (config.env === 'production' && !process.env.VERCEL) {
   logger.add(
     new winston.transports.File({
       filename: 'logs/error.log',
